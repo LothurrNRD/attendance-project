@@ -14,7 +14,8 @@ const userSchema = new Schema({
         type: String,
         required: true,
         minlength: 6
-    }
+    },
+    orders: [{ type: Schema.Types.ObjectId, ref: "orderSchema" }]
 })
 
 export default mongoose.model("User", userSchema);
