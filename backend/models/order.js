@@ -10,13 +10,13 @@ const orderSchema = new Schema({
         type: String,
         required: true
     },
-    items: [{ type: Schema.Types.ObjectId, ref: 'productSchema' }],
+    items: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     situation: {
         type: String,
         enum: ['awaiting', 'shipped', 'delivered'],
         default: 'awaiting'
     },
-    userId: { type: Schema.Types.ObjectId, ref: 'userSchema' }
+    userId: { type: Schema.Types.ObjectId, ref: 'User' }
 })
 
-export default mongoose.model("Orders", orderSchema);
+export default mongoose.model("Order", orderSchema);

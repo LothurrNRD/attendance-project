@@ -15,7 +15,7 @@ const userSchema = new Schema({
         required: true,
         minlength: 6
     },
-    orders: [{ type: Schema.Types.ObjectId, ref: "orderSchema" }]
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }]
 })
 
 export default mongoose.model("User", userSchema);

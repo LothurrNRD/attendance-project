@@ -16,7 +16,7 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
-    orderId: { type: Schema.Types.ObjectId, ref: 'orderSchema' }
+    orderId: { type: Schema.Types.ObjectId, ref: 'Order' }
 })
 
 export default mongoose.model("Product", productSchema);
