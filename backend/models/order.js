@@ -10,7 +10,7 @@ const orderSchema = new Schema({
         type: String,
         required: true
     },
-    items: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    items: [{ type: Schema.Types.ObjectId, ref: 'Product', required: true }],
     situation: {
         type: String,
         enum: ['awaiting', 'shipped', 'delivered'],
