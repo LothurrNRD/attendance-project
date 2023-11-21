@@ -41,7 +41,7 @@ export const login = async (req, res, next) => {
     try {
         existingUser = await User.findOne({ email });
         if (!existingUser) {
-            return res.status(400).json({ message: "There is no User who has this email" });
+            return res.status(204).json({ message: "There is no User who has this email" });
         }
     } catch (error) {
         console.log(error);
