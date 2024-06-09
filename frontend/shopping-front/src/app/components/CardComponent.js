@@ -10,7 +10,6 @@ const ProductCard = ({ product, onAddToCart }) => {
     const { name, price, stock, weight } = product;
 
     const handleAddToCart = () => {
-        // Sepete ekleme işlemi
         onAddToCart(product);
     };
 
