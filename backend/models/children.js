@@ -23,6 +23,7 @@ const childrenSchema = new Schema({
     signedOutTime:{
         type: Date,
     },
+    parent: { type: Schema.Types.ObjectId, ref: 'Parents' },
     situation: {
         type: String,
         enum: ['signIn', 'signOut'],

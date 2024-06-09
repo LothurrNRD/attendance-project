@@ -9,6 +9,7 @@ const classesSchema = new Schema({
         type: String,
         required: true,
     },
+    Children: { type: Schema.Types.ObjectId, ref: 'Children' }
 })
 
 export default mongoose.model("Classes", classesSchema);

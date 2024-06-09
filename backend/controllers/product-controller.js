@@ -1,63 +1,58 @@
-import Product from "../models/product.js";
+import Children from "../models/children.js";
+import Parents from "../models/parents.js";
+import User from "../models/user.js";
+import mongoose from 'mongoose';
+var ObjectId = mongoose.Types.ObjectId;
 
-export const getAllProduct = async (req, res, next) => {
-    let products;
+export const getOrdersByUserId = async (req, res, next) => {
+    let user;
     try {
-        products = await Product.find();
+        user = await User.findById(req.params);
     } catch (error) {
         console.log(error)
     }
-    if (!products) {
-        return res.status(400).json({ message: 'No Products' })
+    if (!user) {
+        return res.status(400).json({ message: "Couldn't find User" })
     }
-    return res.status(200).json({ products })
+    let userOrders = [];
+    for (let index = 0; index < user.orders.length; index++) {
+        const x = new ObjectId(user.orders[index]);
+        userOrders.push() = Order.findById(x);
+    }
+    console.log(userOrders);
+    return res.status(200).json(userOrders);
 }
 
-export const createProduct = async (req, res, next) => {
-    const { name, weight, price, stock } = req.body;
+export const createChildren = async (req, res, next) => {
+    const { name, phoneNumber } = req.body;
+    let child;
     try {
-        let existingProduct = await Product.findOne({ name });
-        if (existingProduct) {
-            return res.status(404).json({ message: 'This product exist' })
-        }
+        child = new Children({
+            name, phoneNumber, ID
+        })
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
-    const product = new Product({
-        name, weight, price, stock
-    })
     try {
-        product.save();
+        await child.save();
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
-    return res.status(200).json({ message: 'Product Saved' })
+    return res.status(200).json({ message: 'Child Saved', child })
 }
 
-export const updateProduct = async (req, res, next) => {
-    const { _id, name, weight, price, stock } = req.body;
+export const updateChildren = async (req, res, next) => {
+    const { name, surname, classes, birthDate } = req.body;
+    let order;
     try {
-        let existingProduct = Product.findById(_id);
-        if (!existingProduct) {
-            return res.status(400).json({ message: 'Product not found' });
-        }
+        order = Children.findById(_id);
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
     try {
-        await Product.updateOne({ _id: _id }, { name: name, weight: weight, price: price, stock: stock });
+        await Children.updateOne({ _id: _id }, { name: name, surname: surname, classes: classes, birthDate: birthDate });
+        return res.status(200).json({ message: 'Child Updated' })
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
-    return res.status(200).json({ message: 'Product Updated' })
-}
-
-export const deleteProduct = async (req, res, next) => {
-    let productId = req.params._id;
-    try {
-        await Product.deleteOne({ _id: productId });
-    } catch (error) {
-        console.log(error);
-    }
-    return res.status(200).json({ message: 'Product Deleted' })
 }

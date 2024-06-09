@@ -10,7 +10,7 @@ const parentsChema = new Schema({
         type: String,
         required: true
     },
-    ID: { type: Schema.Types.ObjectId, ref: 'Children' }
+    Child: { type: Schema.Types.ObjectId, ref: 'Children' }
 })
 
 export default mongoose.model("Parents", parentsChema);

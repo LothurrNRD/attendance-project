@@ -1,5 +1,5 @@
 import Children from "../models/children.js";
-import Product from "../models/product.js";
+import Parents from "../models/parents.js";
 import User from "../models/user.js";
 import mongoose from 'mongoose';
 var ObjectId = mongoose.Types.ObjectId;
