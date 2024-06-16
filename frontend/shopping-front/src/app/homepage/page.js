@@ -2,7 +2,6 @@
 'use client'
 
 import Head from 'next/head';
-import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
@@ -13,13 +12,14 @@ import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Link from 'next/link';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 
 const ChildrenPage = () => {
     const [children, setChildren] = useState([]);
-    const [selectedChild, setSelectedChild] = useState(null); // Seçili çocuğun bilgilerini saklamak için state
+    const [selectedChild, setSelectedChild] = useState(null);
     const [open, setOpen] = useState(false);
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
@@ -41,11 +41,11 @@ const ChildrenPage = () => {
         setOpen(true);
     };
 
-    // Çocuğun bilgilerini güncelleme fonksiyonu
     const handleUpdateChild = () => {
-        // Burada axios veya başka bir yöntemle çocuğun bilgilerini güncelleyebilirsiniz
-        console.log(`Updating child: ${selectedChild.id} - ${selectedChild.name}`);
-        // Örneğin: axios.put(`/api/children/${selectedChild.id}`, selectedChild);
+        console.log(`Updating child: ${selectedChild._id} - ${selectedChild.name}`);
+        axios.post('http://localhost:8001/api/children/update').then((res) => {
+            console.log(res, selectedChild, 'Updated');
+        });
         setOpen(false);
     };
 
@@ -59,7 +59,9 @@ const ChildrenPage = () => {
             <AppBar position="static">
                 <Toolbar>
                     <Button color="inherit">Children Attendance</Button>
-                    <Button color="inherit">Add Children</Button>
+                    <Link href="/addpage" passHref>
+                        <Button color="inherit">Create Child</Button>
+                    </Link>
                     <Button color="inherit">Total Revenue</Button>
                 </Toolbar>
             </AppBar>
