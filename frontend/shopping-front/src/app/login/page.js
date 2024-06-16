@@ -1,39 +1,30 @@
-'use client'
+// src/app/login/page.js
+
+'use client'; // Ensure this directive is at the top
+
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
-    const [email, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userLogin, setUserLogin] = useState({});
-    const [loginCheck, setLoginCheck] = useState(false);
-    const routes = useRouter()
-    const handleLogin = async () => {
-        setUserLogin({ email: email, password: password });
+    const router = useRouter();
+
+    const handleLogin = () => {
+        setUserLogin({ email, password });
     };
+
     useEffect(() => {
         if (userLogin.email && userLogin.password) {
-            axios.post('http://localhost:8000/api/user/login', userLogin, {
-                withCredentials: true,
-                credentials: 'include',
-            })
-                .then((response) => {
-                    console.log("Login Succesfully", response);
-                    if (response.status = 200) {
-                        setLoginCheck(true);
-                        routes.push('Shop-page');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setLoginCheck(false);
-                });
+            // Simulate a successful login
+            router.push('/homepage');
         }
-    }, [userLogin]);
+    }, [userLogin, router]);
 
     return (
         <Container component="main" maxWidth="xs">

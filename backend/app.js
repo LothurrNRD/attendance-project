@@ -1,22 +1,20 @@
 import express from "express";
 import mongoose from "mongoose";
-import userRouter from "./routes/user-routes.js";
-import productRoutes from "./routes/product-routes.js";
-import orderRoutes from "./routes/order-routes.js";
 import cors from 'cors';
+import childrenRoutes from "./routes/children-routes.js";
 
 const app = express();
 app.use(express.json())
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:8001',
     credentials: true,
     optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
-app.use("/api/user", userRouter);
-app.use("/api/product", productRoutes);
-app.use("/api/order", orderRoutes);
-mongoose.connect('mongodb+srv://shoppingproject1903:J9Wg9yZfhfzavafs@shoppingproject.zih1a0x.mongodb.net/').then(() => {
-    app.listen(8000);
+app.use("/api/children", childrenRoutes);
+mongoose.connect('mongodb+srv://childrenattendance:JesxljEUCIfvl1Np@childrenattendance.suzxqmu.mongodb.net/childrenattendance').then(() => {
+    app.listen(8001);
 }).then(console.log("Connected to MongoDB"));
+
+// JesxljEUCIfvl1Np childrenattendance

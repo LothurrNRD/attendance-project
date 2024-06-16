@@ -6,21 +6,21 @@ const childrenSchema = new Schema({
         type: String,
         required: true
     },
-    surname:{
+    surname: {
         type: String,
         required: true
     },
-    birthdate: {
-        type: String,
+    birthDate: {
+        type: Date,
         required: true
     },
-    information:{
+    information: {
         type: String,
     },
-    signedTime:{
+    signedTime: {
         type: Date,
     },
-    signedOutTime:{
+    signedOutTime: {
         type: Date,
     },
     parent: { type: Schema.Types.ObjectId, ref: 'Parents' },
