@@ -23,13 +23,13 @@ const childrenSchema = new Schema({
     signedOutTime: {
         type: Date,
     },
-    parent: { type: Schema.Types.ObjectId, ref: 'Parents' },
+    parents: [{ type: Schema.Types.ObjectId, ref: 'Parents' }],
     situation: {
         type: String,
         enum: ['signIn', 'signOut'],
         default: 'signOut'
     },
-    class: { type: Schema.Types.ObjectId, ref: 'Classes' }
+    classes: { type: Schema.Types.ObjectId, ref: 'Classes' }
 })
 
 export default mongoose.model("Children", childrenSchema);

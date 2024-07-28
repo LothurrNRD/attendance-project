@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from 'cors';
 import childrenRoutes from "./routes/children-routes.js";
+import classesRoutes from "./routes/classes-routes.js";
+import parentsRoutes from "./routes/parents-routes.js";
 
 const app = express();
 app.use(express.json())
@@ -13,8 +15,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use("/api/children", childrenRoutes);
-mongoose.connect('mongodb+srv://childrenattendance:JesxljEUCIfvl1Np@childrenattendance.suzxqmu.mongodb.net/childrenattendance').then(() => {
-    app.listen(8001);
+app.use("/api/classes", classesRoutes);
+app.use("/api/parents", parentsRoutes);
+mongoose.connect('mongodb+srv://childrenattendance:JesxljEUCIfvl1Np@childrenattendance.suzxqmu.mongodb.net/childrenattendance?retryWrites=true&w=majority&ssl=true').then(() => {
+    app.listen(8000);
 }).then(console.log("Connected to MongoDB"));
 
 // JesxljEUCIfvl1Np childrenattendance

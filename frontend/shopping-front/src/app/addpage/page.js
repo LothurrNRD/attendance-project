@@ -1,49 +1,87 @@
-// pages/create-children.js
 'use client'
 
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Container, AppBar, Toolbar, Typography, Button, Grid, TextField, MenuItem, FormControl, InputLabel, Select, FormControlLabel, Checkbox, FormGroup, FormLabel, Paper, Box } from '@mui/material';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import 'dayjs/locale/en';
+import { Container, AppBar, Toolbar, Typography, Button, Grid, TextField, MenuItem, FormControl, InputLabel, Select, Paper } from '@mui/material';
 import Link from 'next/link';
+import axios from 'axios';
+
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
+dayjs.locale('en');
 
 const CreateChildren = () => {
-    // State for form fields
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [birthDate, setBirthDate] = useState(null);
     const [information, setInformation] = useState('');
     const [parents, setParents] = useState([{ name: '', phoneNumber: '' }]);
     const [classes, setClasses] = useState('');
-    const classOptions = ['1th', '2th', '3th'];
+    const [classOptions, setClassOptions] = useState([]);
 
-    // Handler for adding new parent
+    // Fetch classes from the database on component mount
+    useEffect(() => {
+        const fetchClasses = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/classes/all'); // Sınıfları almak için API isteği
+                setClassOptions(response.data.classes);
+            } catch (error) {
+                console.error('Error fetching classes:', error);
+            }
+        };
+
+        fetchClasses();
+    }, []);
+
     const handleAddParent = () => {
         setParents([...parents, { name: '', phoneNumber: '' }]);
     };
 
-    // Handler for submitting form
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // You can handle form submission here (e.g., send data to backend)
-        console.log({
-            name,
-            surname,
-            birthDate,
-            information,
-            parents,
-            classes
-        });
-        // Reset form fields after submission (optional)
-        setName('');
-        setSurname('');
-        setBirthDate(null);
-        setInformation('');
-        setParents([{ name: '', phoneNumber: '' }]);
-        setClasses('');
+        const formattedBirthDate = birthDate ? dayjs(birthDate).toISOString() : '';
+        
+        // Create each parent and collect their IDs
+        try {
+            const parentIds = [];
+            for (const parent of parents) {
+                console.log(parent)
+                const response = await axios.post('http://localhost:8000/api/parents/create', parent);
+                console.log(response);
+                parentIds.push(response.data.parent._id); // Adjust based on your response structure
+            }
+
+            const childData = {
+                name,
+                surname,
+                birthDate: formattedBirthDate,
+                information,
+                parents: parentIds,
+                classes
+            };
+            console.log(childData);
+
+            const childResponse = await axios.post('http://localhost:8000/api/children/create', childData);
+            console.log('Child added successfully:', childResponse.data);
+
+            // Reset form fields after submission (optional)
+            setName('');
+            setSurname('');
+            setBirthDate(null);
+            setInformation('');
+            setParents([{ name: '', phoneNumber: '' }]);
+            setClasses('');
+        } catch (error) {
+            console.error('Error adding child or parents:', error);
+        }
     };
 
     return (
@@ -58,7 +96,8 @@ const CreateChildren = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Create Children
                     </Typography>
-                    <Link href='/homepage' passHref><Button color="inherit">Home</Button>
+                    <Link href='/homepage' passHref>
+                        <Button color="inherit">Home</Button>
                     </Link>
                 </Toolbar>
             </AppBar>
@@ -96,6 +135,8 @@ const CreateChildren = () => {
                                             value={birthDate}
                                             onChange={(newValue) => setBirthDate(newValue)}
                                             renderInput={(params) => <TextField {...params} />}
+                                            inputFormat="DD/MM/YYYY" // Set the input format
+                                            mask="__/__/____" // Set the input mask
                                             fullWidth
                                             required
                                         />
@@ -157,8 +198,8 @@ const CreateChildren = () => {
                                         onChange={(e) => setClasses(e.target.value)}
                                     >
                                         {classOptions.map((option) => (
-                                            <MenuItem key={option} value={option}>
-                                                {option}
+                                            <MenuItem key={option._id} value={option._id}>
+                                                {option.name}
                                             </MenuItem>
                                         ))}
                                     </Select>
