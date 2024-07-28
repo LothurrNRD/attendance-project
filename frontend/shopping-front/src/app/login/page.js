@@ -1,30 +1,51 @@
-// src/app/login/page.js
-
 'use client'; // Ensure this directive is at the top
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useRouter } from 'next/navigation';
+import axios from 'axios'; // Import axios
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userLogin, setUserLogin] = useState({});
+    const [error, setError] = useState('');
     const router = useRouter();
 
-    const handleLogin = () => {
-        setUserLogin({ email, password });
-    };
+    const handleLogin = async () => {
+        setError(''); // Clear previous errors
 
-    useEffect(() => {
-        if (userLogin.email && userLogin.password) {
-            // Simulate a successful login
-            router.push('/homepage');
+        // Basic validation
+        if (!email || !password) {
+            setError('Email and password are required.');
+            return;
         }
-    }, [userLogin, router]);
+
+        try {
+            // Make the API call to the login endpoint
+            const response = await axios.post('http://localhost:8000/api/admin/login', {
+                email,
+                password
+            });
+
+            // Handle the response
+            if (response.status === 200) {
+                // Store token in localStorage (or other preferred method)
+                localStorage.setItem('token', response.data.token);
+
+                // Redirect to homepage on successful login
+                router.push('/homepage');
+            } else {
+                // Display error message
+                setError(response.data.message || 'Login failed.');
+            }
+        } catch (err) {
+            console.error('Error logging in:', err);
+            setError('An error occurred while logging in.');
+        }
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -56,6 +77,7 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                {error && <Typography color="error">{error}</Typography>}
                 <Button
                     type="button"
                     fullWidth

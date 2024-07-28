@@ -1,7 +1,6 @@
 import Children from "../models/children.js";
 import Parents from "../models/parents.js";
 import mongoose from 'mongoose';
-var ObjectId = mongoose.Types.ObjectId;
 
 export const getAllChildren = async (req, res, next) => {
     let children;
