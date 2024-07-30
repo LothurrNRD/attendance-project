@@ -1,9 +1,9 @@
 //sk-proj-2vFfPUOQm8AtTRQh6JxVT3BlbkFJkLCTsOMqLKjvplzeMpC6
 
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAIApi, Configuration } from 'openai';
 
 const configuration = new Configuration({
-    apiKey: 'sk-proj-2vFfPUOQm8AtTRQh6JxVT3BlbkFJkLCTsOMqLKjvplzeMpC6', 
+    apiKey: 'YOUR_OPENAI_API_KEY', // Buraya kendi API anahtarınızı girin
 });
 const openai = new OpenAIApi(configuration);
 
@@ -19,3 +19,4 @@ export const getChatResponse = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+

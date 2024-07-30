@@ -1,8 +1,8 @@
 import express from 'express';
 import { getChatResponse } from '../controllers/chatgpt-controller.js';
 
-const router = express.Router();
+const chatgptRoutes = express.Router();
 
-router.post('/chat', getChatResponse);
+chatgptRoutes.post('/chat', getChatResponse);
 
 export default chatgptRoutes;
